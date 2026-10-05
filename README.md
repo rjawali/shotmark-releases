@@ -4,9 +4,10 @@ A native macOS screenshot and markup app for Kantiv.
 
 ## Download
 
-[Download the latest release](https://github.com/rjawali/shotmark-releases/releases/latest).
-Choose the `.dmg` file, open it, and drag ShotMark into Applications. Launch the
-app and follow Capture Setup to enable Screen Recording.
+**[Download ShotMark for Mac](https://rjawali.github.io/shotmark-releases/)**, or get the installer
+directly: [ShotMark.dmg](https://github.com/rjawali/shotmark-releases/releases/latest/download/ShotMark.dmg).
+Open it and drag ShotMark into Applications. If you open it from the installer instead,
+ShotMark offers to move itself. A short welcome then turns on screen capture.
 
 Requires macOS 13 or later. Installers include Apple Silicon and Intel binaries.
 Releases are signed with Joist Technologies Inc.’s Developer ID and notarized by Apple.
