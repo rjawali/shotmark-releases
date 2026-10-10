@@ -4,114 +4,268 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Download ShotMark</title>
-<meta name="description" content="ShotMark for Mac: capture anything on your screen, mark it up and share a clear answer in seconds.">
+<meta name="description" content="ShotMark is Kantiv's Mac app for screenshots, GIFs and narrated video. Press Stop and the Google Drive link is already in your clipboard.">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#f7f6f4" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#141414" media="(prefers-color-scheme: dark)">
 <link rel="icon" href="assets/icon.png">
 <style>
   :root {
-    --bg: #f7f6f4; --surface: #ffffff; --text: #1d1d1f; --muted: #6e6e73;
-    --line: rgba(0,0,0,.08); --brand: #c23626; --brand-press: #a82d1f; --shadow: 0 18px 50px rgba(0,0,0,.12);
+    --bg: #f7f6f4; --surface: #ffffff; --surface-2: #f0eeeb;
+    --text: #1d1d1f; --muted: #5f5f66; --line: rgba(0, 0, 0, .09);
+    --brand: #c2362a; --brand-hover: #ad2f24; --brand-text: #b02f23; --brand-soft: rgba(194, 54, 42, .08);
+    --on-brand: #ffffff;
+    --shadow: 0 1px 2px rgba(0, 0, 0, .05), 0 12px 32px rgba(0, 0, 0, .08);
+    --focus: #2b5fd9;
   }
   @media (prefers-color-scheme: dark) {
-    :root { --bg: #161616; --surface: #222222; --text: #f5f5f7; --muted: #a1a1a6; --line: rgba(255,255,255,.1); --shadow: 0 18px 50px rgba(0,0,0,.5); }
+    :root {
+      --bg: #141414; --surface: #1e1e1f; --surface-2: #262627;
+      --text: #f2f2f4; --muted: #a3a3aa; --line: rgba(255, 255, 255, .1);
+      --brand: #cf4030; --brand-hover: #dc4b3a; --brand-text: #fa6e57; --brand-soft: rgba(250, 110, 87, .12);
+      --shadow: 0 1px 2px rgba(0, 0, 0, .4), 0 16px 40px rgba(0, 0, 0, .45);
+      --focus: #7aa2ff;
+    }
   }
+
   * { box-sizing: border-box; }
-  body { margin: 0; background: var(--bg); color: var(--text);
-         font: 16px/1.5 -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", sans-serif;
-         -webkit-font-smoothing: antialiased; }
-  main { max-width: 980px; margin: 0 auto; padding: 72px 16px 48px; text-align: center; }
-  .icon { width: 128px; height: 128px; filter: drop-shadow(0 14px 24px rgba(0,0,0,.18)); animation: float 4s ease-in-out infinite; }
-  @keyframes float { 50% { transform: translateY(-6px); } }
-  h1 { font-size: clamp(36px, 6vw, 56px); line-height: 1.05; letter-spacing: -.02em; margin: 28px 0 14px; }
-  .lede { font-size: 20px; color: var(--muted); max-width: 560px; margin: 0 auto 34px; }
-  .download { display: inline-flex; align-items: center; gap: 10px; background: var(--brand); color: #fff; text-decoration: none;
-              font-weight: 600; font-size: 17px; padding: 15px 30px; border-radius: 12px; transition: transform .12s, background .12s; }
-  .download:hover { background: var(--brand-press); }
-  .download:active { transform: scale(.98); }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0; background: var(--bg); color: var(--text);
+    font: 16px/1.5 -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility;
+  }
+  a { color: var(--brand-text); text-decoration-thickness: 1px; text-underline-offset: 2px; }
+  :focus-visible { outline: 2px solid var(--focus); outline-offset: 3px; border-radius: 4px; }
+  img, svg { display: block; max-width: 100%; }
+  .wrap { width: min(100% - 32px, 1040px); margin: 0 auto; }
+  h1, h2, h3 { margin: 0; font-weight: 600; letter-spacing: -.015em; }
+  p { margin: 0; }
+  .visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+  /* Top bar */
+  .top { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 18px 0; }
+  .wordmark { display: inline-flex; align-items: center; gap: 10px; color: var(--text); text-decoration: none; font-weight: 600; font-size: 15px; }
+  .wordmark img { width: 28px; height: 28px; }
+  .top nav { display: flex; gap: 22px; font-size: 14px; }
+  .top nav a { color: var(--muted); text-decoration: none; }
+  .top nav a:hover { color: var(--text); }
+
+  /* Hero */
+  .hero { text-align: center; padding: 56px 0 40px; }
+  .hero .icon { width: 112px; height: 112px; margin: 0 auto 26px; filter: drop-shadow(0 10px 22px rgba(0, 0, 0, .14)); }
+  .eyebrow { display: inline-block; color: var(--brand-text); font-size: 13px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; margin-bottom: 14px; }
+  .hero h1 { font-size: clamp(34px, 5.2vw, 54px); line-height: 1.08; max-width: 14ch; margin: 0 auto; }
+  .lede { font-size: clamp(17px, 2vw, 20px); line-height: 1.5; color: var(--muted); max-width: 36em; margin: 18px auto 0; }
+  .cta { margin-top: 30px; }
+  .download {
+    display: inline-flex; align-items: center; justify-content: center; gap: 10px; min-height: 52px; min-width: 240px;
+    padding: 14px 28px; border-radius: 12px; background: var(--brand); color: var(--on-brand); text-decoration: none;
+    font-weight: 600; font-size: 17px; box-shadow: 0 1px 2px rgba(0, 0, 0, .12); transition: background .12s, transform .12s;
+  }
+  .download:hover { background: var(--brand-hover); }
+  .download:active { transform: translateY(1px); }
   .download svg { width: 18px; height: 18px; }
-  .meta { color: var(--muted); font-size: 13px; margin-top: 14px; }
-  .meta a { color: inherit; }
-  .not-mac { display: none; margin-top: 14px; font-size: 14px; color: var(--muted); }
+  .meta { color: var(--muted); font-size: 13.5px; margin-top: 14px; }
+  .meta a { color: var(--muted); }
+  .meta a:hover { color: var(--text); }
+  .verify { margin-top: 8px; }
+  .verify code { font: 12.5px/1.5 ui-monospace, "SF Mono", Menlo, monospace; }
+  .verify #sha { word-break: break-all; }
+  .meta .nowrap { white-space: nowrap; }
+  .not-mac { display: none; margin: 14px auto 0; max-width: 32em; font-size: 14px; color: var(--muted); }
   body.other-os .not-mac { display: block; }
 
-  .started { display: none; }
-  body.downloading .started { display: block; animation: rise .5s ease both; }
-  body.downloading .hero-cta { display: none; }
-  @keyframes rise { from { opacity: 0; transform: translateY(12px); } }
-  .started h2 { font-size: 28px; margin: 0 0 6px; letter-spacing: -.01em; }
-  .started > p { color: var(--muted); margin: 0 0 36px; }
-  .started > p a { color: var(--brand); }
+  /* After the click */
+  .started { display: none; margin: 30px auto 0; max-width: 620px; text-align: left; background: var(--surface); border: 1px solid var(--line);
+             border-radius: 16px; padding: 22px 24px; box-shadow: var(--shadow); }
+  body.downloading .cta { display: none; }
+  body.downloading .started { display: block; animation: rise .45s ease both; }
+  @keyframes rise { from { opacity: 0; transform: translateY(10px); } }
+  .started h2 { font-size: 22px; display: flex; align-items: center; gap: 10px; }
+  .started h2 svg { width: 22px; height: 22px; color: var(--brand-text); flex: none; }
+  .started > p { color: var(--muted); margin-top: 6px; font-size: 15px; }
+  .started ol { margin: 16px 0 0; padding-left: 22px; font-size: 15px; }
+  .started li { padding-left: 4px; margin-bottom: 6px; }
+  .started li:last-child { margin-bottom: 0; }
 
-  .steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; text-align: left; }
-  .step { background: var(--surface); border: 1px solid var(--line); border-radius: 18px; padding: 18px; box-shadow: var(--shadow); }
-  .step .art { aspect-ratio: 16 / 10; border-radius: 10px; overflow: hidden; position: relative; background: var(--bg);
+  /* What it does */
+  section { padding: 44px 0; }
+  .section-title { font-size: clamp(22px, 2.6vw, 28px); margin-bottom: 8px; }
+  .section-sub { color: var(--muted); max-width: 46em; margin-bottom: 28px; }
+  .features { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+  .feature { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 20px 20px 22px; }
+  .feature .glyph { width: 36px; height: 36px; border-radius: 9px; background: var(--brand-soft); color: var(--brand-text);
+                    display: flex; align-items: center; justify-content: center; margin-bottom: 16px; }
+  .feature .glyph svg { width: 20px; height: 20px; }
+  .feature h3 { font-size: 16px; margin-bottom: 6px; }
+  .feature p { color: var(--muted); font-size: 14.5px; line-height: 1.5; }
+
+  /* Product visual */
+  .shot { padding-top: 8px; }
+  .window { border-radius: 12px; overflow: hidden; border: 1px solid var(--line); box-shadow: var(--shadow); background: var(--surface-2); }
+  .window img { width: 100%; height: auto; }
+  figcaption { color: var(--muted); font-size: 14px; margin-top: 14px; text-align: center; }
+  .panel-row { display: grid; grid-template-columns: minmax(0, 328px) 1fr; gap: 24px; align-items: center; margin-top: 36px;
+               padding: 22px 24px; background: var(--surface); border: 1px solid var(--line); border-radius: 14px; }
+  .panel-row img { width: 100%; height: auto; max-width: 328px; filter: drop-shadow(0 6px 16px rgba(0, 0, 0, .14)); }
+  .panel-row h3 { font-size: 16px; margin-bottom: 4px; }
+  .panel-row p { color: var(--muted); font-size: 14.5px; }
+
+  /* Install */
+  .steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; counter-reset: step; }
+  .step { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 14px 14px 18px; }
+  .step .art { aspect-ratio: 16 / 10; border-radius: 9px; overflow: hidden; position: relative; background: var(--surface-2);
                display: flex; align-items: center; justify-content: center; }
-  .num { display: inline-flex; width: 24px; height: 24px; border-radius: 50%; background: var(--brand); color: #fff;
-         font-size: 13px; font-weight: 700; align-items: center; justify-content: center; margin: 16px 0 6px; }
-  .step h3 { margin: 0 0 4px; font-size: 17px; }
-  .step p { margin: 0; color: var(--muted); font-size: 14px; }
+  .step .num { display: inline-flex; width: 24px; height: 24px; border-radius: 50%; background: var(--brand); color: var(--on-brand);
+               font-size: 13px; font-weight: 700; align-items: center; justify-content: center; margin: 16px 0 8px; }
+  .step h3 { font-size: 16px; margin-bottom: 4px; }
+  .step p { color: var(--muted); font-size: 14.5px; }
+  .step p b { color: var(--text); font-weight: 600; }
 
-  /* Step 1: the download in Chrome/Safari's downloads list */
-  .dl { width: 78%; background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 12px; display: flex; gap: 10px; align-items: center;
-        box-shadow: 0 6px 18px rgba(0,0,0,.1); position: relative; }
-  .dl .file { width: 30px; height: 36px; border-radius: 4px; background: linear-gradient(#e8e8ed, #d2d2d7); position: relative; flex: none; }
-  .dl .file::after { content: ""; position: absolute; inset: 9px 6px; background: url(assets/icon.png) center / contain no-repeat; }
-  .dl b { display: block; font-size: 13px; }
-  .dl small { color: var(--muted); font-size: 11px; }
-  .dl .bar { height: 4px; border-radius: 2px; background: var(--line); margin-top: 6px; overflow: hidden; }
-  .dl .bar i { display: block; height: 100%; background: var(--brand); animation: fill 2.6s ease-in-out infinite; }
-  @keyframes fill { 0% { width: 0 } 60%, 100% { width: 100% } }
-  .pointer { position: absolute; width: 18px; right: 18%; bottom: 14%; animation: tap 2.6s ease-in-out infinite; }
-  @keyframes tap { 0%, 55% { transform: translate(24px, 18px); opacity: 0 } 70% { transform: none; opacity: 1 } 80% { transform: scale(.85) } 90%, 100% { transform: none; opacity: 1 } }
-
+  /* Step 1: the disk image */
+  .disk { width: 36%; color: var(--muted); }
+  .disk .label { position: absolute; left: 0; right: 0; bottom: 12%; text-align: center; font-size: 12px; color: var(--muted); }
   /* Step 2: the real installer window */
   .dmg { position: absolute; inset: 0; background: url(assets/dmg-background.png) center / cover; }
-  .dmg .app, .dmg .folder { position: absolute; top: 50%; width: 22%; transform: translate(-50%, -50%); }
-  .dmg .app { left: 26.5%; animation: drag 3.2s ease-in-out infinite; }
+  .dmg .app, .dmg .folder { position: absolute; top: 50%; width: 22%; height: auto; transform: translate(-50%, -50%); }
+  .dmg .app { left: 26.5%; animation: drag 3.6s ease-in-out infinite; }
   .dmg .folder { left: 73.5%; }
-  @keyframes drag { 0%, 15% { left: 26.5%; opacity: 1 } 60% { left: 73.5%; opacity: 1; transform: translate(-50%, -50%) scale(.8) } 70%, 100% { left: 73.5%; opacity: 0; transform: translate(-50%, -50%) scale(.6) } }
+  @keyframes drag { 0%, 20% { left: 26.5%; opacity: 1 } 62% { left: 73.5%; opacity: 1; transform: translate(-50%, -50%) scale(.8) } 72%, 100% { left: 73.5%; opacity: 0; transform: translate(-50%, -50%) scale(.6) } }
+  /* Step 3: the welcome window, cropped to its top */
+  .welcome { width: 60%; height: auto; border-radius: 8px 8px 0 0; box-shadow: 0 8px 24px rgba(0, 0, 0, .18); margin-top: 20%; }
 
-  /* Step 3: the welcome window */
-  .welcome { width: 58%; border-radius: 10px; box-shadow: 0 10px 28px rgba(0,0,0,.2); margin-top: 18%; }
+  /* Privacy */
+  .privacy { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  .privacy > div { display: flex; gap: 12px; align-items: flex-start; }
+  .privacy svg { width: 20px; height: 20px; color: var(--brand-text); flex: none; margin-top: 2px; }
+  .privacy h3 { font-size: 15px; margin-bottom: 2px; }
+  .privacy p { color: var(--muted); font-size: 14px; }
 
-  .reassure { display: flex; justify-content: center; gap: 28px; flex-wrap: wrap; margin-top: 56px; color: var(--muted); font-size: 14px; }
-  .reassure span::before { content: "✓ "; color: var(--brand); font-weight: 700; }
-  footer { text-align: center; color: var(--muted); font-size: 13px; padding: 24px 16px 48px; }
-  footer a { color: inherit; }
+  footer { border-top: 1px solid var(--line); padding: 22px 0 40px; color: var(--muted); font-size: 13.5px; }
+  footer .wrap { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+  footer a { color: var(--muted); }
+  footer a:hover { color: var(--text); }
 
-  @media (max-width: 760px) {
-    main { padding-top: 48px; }
-    .steps { grid-template-columns: 1fr; }
-    .lede { font-size: 18px; }
+  @media (max-width: 900px) {
+    .features, .privacy { grid-template-columns: repeat(2, 1fr); }
   }
-  @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; } }
+  @media (max-width: 640px) {
+    .top { padding: 14px 0; }
+    .top nav { gap: 16px; }
+    .hero { padding: 36px 0 28px; }
+    .hero .icon { width: 88px; height: 88px; margin-bottom: 20px; }
+    .download { width: 100%; }
+    section { padding: 32px 0; }
+    .features, .steps, .privacy { grid-template-columns: 1fr; }
+    .panel-row { grid-template-columns: 1fr; gap: 16px; padding: 18px; }
+    .started { padding: 18px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    *, *::before, *::after { animation: none !important; transition: none !important; }
+    .dmg .app { left: 26.5%; opacity: 1; }
+  }
 </style>
 </head>
 <body>
-<main>
-  <img class="icon" src="assets/icon.png" alt="ShotMark app icon">
-  <h1>ShotMark</h1>
-  <p class="lede">Capture anything on your screen, mark it up and share a clear answer in seconds.</p>
+<header class="wrap top">
+  <a class="wordmark" href="#"><img src="assets/icon.png" width="28" height="28" alt="">ShotMark</a>
+  <nav aria-label="Releases">
+    <a href="https://github.com/rjawali/shotmark-releases/releases/latest">What’s new</a>
+    <a href="https://github.com/rjawali/shotmark-releases/releases">All releases</a>
+  </nav>
+</header>
 
-  <div class="hero-cta">
-    <a class="download" id="download" href="https://github.com/rjawali/shotmark-releases/releases/latest/download/ShotMark.dmg">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v12m0 0-5-5m5 5 5-5M5 20h14"/></svg>
-      Download for Mac
-    </a>
-    <p class="meta">macOS 13 or later · Apple silicon and Intel · <a href="https://github.com/rjawali/shotmark-releases/releases/latest">What’s new</a></p>
-    <p class="not-mac">ShotMark is a Mac app. Open this page on your Mac to download it.</p>
-  </div>
+<main id="main">
+  <section class="wrap hero" aria-labelledby="title">
+    <img class="icon" src="assets/icon.png" width="112" height="112" alt="ShotMark app icon">
+    <span class="eyebrow">For Kantiv · macOS</span>
+    <h1 id="title">Capture it, mark it up, send the link.</h1>
+    <p class="lede">ShotMark is Kantiv’s Mac app for screenshots, GIFs and narrated video. Press Stop and the Google Drive link is already in your clipboard.</p>
 
-  <section class="started" aria-live="polite">
-    <h2>Your download has started</h2>
-    <p>Three quick steps and you’re capturing. Download didn’t start? <a id="retry" href="https://github.com/rjawali/shotmark-releases/releases/latest/download/ShotMark.dmg">Try again</a>.</p>
+    <div class="cta">
+      <a class="download" id="download" href="https://github.com/rjawali/shotmark-releases/releases/latest/download/ShotMark.dmg">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v12m0 0-5-5m5 5 5-5M5 20h14"/></svg>
+        Download for Mac
+      </a>
+      <p class="meta">macOS 13 or later · Apple silicon and Intel · <a class="nowrap" href="https://github.com/rjawali/shotmark-releases/releases/latest">What’s new</a></p>
+      <p class="meta verify" id="verify" hidden>Version <span id="ver"></span> · SHA-256 <code id="sha"></code><br>Check your download with <code>shasum -a 256 ~/Downloads/ShotMark.dmg</code></p>
+      <p class="not-mac">ShotMark is a Mac app. Open this page on your Mac to download it.</p>
+    </div>
+
+    <div class="started" role="status" aria-live="polite">
+      <h2><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="m8.5 12 2.5 2.5 4.5-5"/></svg>Your download has started</h2>
+      <p>Three steps and you’re capturing. Download didn’t start? <a id="retry" href="https://github.com/rjawali/shotmark-releases/releases/latest/download/ShotMark.dmg">Try again</a>.</p>
+      <ol>
+        <li>Open <b>ShotMark.dmg</b> from your browser’s downloads or your Downloads folder.</li>
+        <li>Drag ShotMark into the Applications folder.</li>
+        <li>Open ShotMark and allow screen capture when macOS asks. <a href="#install">See the steps</a>.</li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="wrap" aria-labelledby="what">
+    <h2 class="section-title" id="what">What it does</h2>
+    <p class="section-sub">Everything you used Loom and a screenshot tool for, in one app that lives in your menu bar.</p>
+    <div class="features">
+      <article class="feature">
+        <div class="glyph" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9V6a2 2 0 0 1 2-2h3M15 4h3a2 2 0 0 1 2 2v3M20 15v3a2 2 0 0 1-2 2h-3M9 20H6a2 2 0 0 1-2-2v-3"/></svg></div>
+        <h3>Capture anything</h3>
+        <p>An area, a window, a whole screen or a scrolling page, each with its own shortcut.</p>
+      </article>
+      <article class="feature">
+        <div class="glyph" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6" width="13" height="12" rx="2"/><path d="m16 10 5-3v10l-5-3"/></svg></div>
+        <h3>Record like Loom</h3>
+        <p>Narrate a walkthrough with a camera bubble, or record a GIF; press Stop and the Drive link is in your clipboard.</p>
+      </article>
+      <article class="feature">
+        <div class="glyph" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 19 19 5M19 5h-6M19 5v6"/><circle cx="7" cy="17" r="3"/></svg></div>
+        <h3>Mark it up</h3>
+        <p>Arrows, comments, numbered steps, blur and redact, crop and text recognition in one editor.</p>
+      </article>
+      <article class="feature">
+        <div class="glyph" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 17v4M8 21h8M9 3h6l1 7h2a1 1 0 0 1 1 1v2H5v-2a1 1 0 0 1 1-1h2z"/></svg></div>
+        <h3>Stays out of the way</h3>
+        <p>Pin a capture to your screen, set your own shortcuts, and let ShotMark update itself.</p>
+      </article>
+    </div>
+  </section>
+
+  <section class="wrap shot" aria-labelledby="editor-title">
+    <h2 class="section-title visually-hidden" id="editor-title">The markup editor</h2>
+    <figure style="margin:0">
+      <div class="window">
+        <picture>
+          <source srcset="assets/editor-dark.webp" media="(prefers-color-scheme: dark)" width="2000" height="1504">
+          <img src="assets/editor-light.webp" width="2000" height="1504" loading="lazy" decoding="async"
+               alt="The ShotMark markup editor with a captured window on the canvas: three numbered step markers, a comment reading “Mention the Drive link here”, and an arrow pointing at a button. The inspector shows the comment’s size, colours, shape and border; the tool dock runs along the bottom.">
+        </picture>
+      </div>
+      <figcaption>The editor: add steps, comments and arrows, then Copy or Share. Blur and Redact are flattened into every export.</figcaption>
+    </figure>
+
+    <div class="panel-row">
+      <picture>
+        <source srcset="assets/quick-access-dark.webp" media="(prefers-color-scheme: dark)" width="656" height="208">
+        <img src="assets/quick-access-light.webp" width="656" height="208" loading="lazy" decoding="async"
+             alt="The quick-access panel that appears after a capture, reading “Saved and copied”, with buttons for Copy, Edit, Save As, Pin, Share and Link.">
+      </picture>
+      <div>
+        <h3>After every capture</h3>
+        <p>A small panel confirms the save without pulling you out of your work: Copy, Edit, Save As, Pin to screen, Share, or put a Google Drive link in your clipboard.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="wrap" id="install" aria-labelledby="install-title">
+    <h2 class="section-title" id="install-title">Install in three steps</h2>
+    <p class="section-sub">About a minute. The installer is signed and notarized, so macOS opens it without warnings.</p>
     <div class="steps">
       <article class="step">
         <div class="art" aria-hidden="true">
-          <div class="dl">
-            <span class="file"></span>
-            <div style="flex:1"><b>ShotMark.dmg</b><small>4 MB · Downloads</small><div class="bar"><i></i></div></div>
-          </div>
-          <svg class="pointer" viewBox="0 0 16 24"><path d="M1 1v19l5-5 4 8 3-1.5-4-8h7z" fill="#000" stroke="#fff" stroke-width="1.4" stroke-linejoin="round"/></svg>
+          <svg class="disk" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="14" width="48" height="36" rx="5"/><path d="M8 38h48"/><circle cx="46" cy="44" r="2" fill="currentColor" stroke="none"/><path d="M24 24h16M24 30h10"/></svg>
+          <span class="label">ShotMark.dmg</span>
         </div>
         <span class="num">1</span>
         <h3>Open the download</h3>
@@ -121,7 +275,7 @@
         <div class="art" aria-hidden="true">
           <div class="dmg">
             <svg class="folder" viewBox="0 0 64 52"><path d="M3 8a4 4 0 0 1 4-4h16l5 5h29a4 4 0 0 1 4 4v33a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4z" fill="#3d9bf0"/><path d="M3 16h58v30a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4z" fill="#62b3f7"/><path d="M24 39 32 23l8 16m-13-5h10" stroke="#fff" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round" opacity=".9"/></svg>
-            <img class="app" src="assets/icon.png" alt="">
+            <img class="app" src="assets/icon.png" width="512" height="512" alt="">
           </div>
         </div>
         <span class="num">2</span>
@@ -130,23 +284,54 @@
       </article>
       <article class="step">
         <div class="art" aria-hidden="true">
-          <img class="welcome" src="assets/welcome.png" alt="">
+          <img class="welcome" src="assets/welcome.png" width="560" height="632" loading="lazy" alt="">
         </div>
         <span class="num">3</span>
-        <h3>Open ShotMark</h3>
-        <p>Open it from Applications or Spotlight. A short welcome turns on screen capture and walks you through your first shot.</p>
+        <h3>Open ShotMark and allow screen capture</h3>
+        <p>macOS asks once for Screen Recording; the welcome walks you through it and your first shot.</p>
       </article>
     </div>
   </section>
 
-  <div class="reassure">
-    <span>Signed and notarized by Apple</span>
-    <span>Captures stay on your Mac</span>
-    <span>Updates itself</span>
-  </div>
+  <section class="wrap" aria-labelledby="privacy-title">
+    <h2 class="section-title" id="privacy-title">Yours, on your Mac</h2>
+    <p class="section-sub">There is no ShotMark server. The only connections are GitHub for updates and Google for your own Drive.</p>
+    <div class="privacy">
+      <div>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3 5 6v5c0 4.5 3 8.2 7 9 4-.8 7-4.5 7-9V6z"/><path d="m9.5 12 2 2 3.5-4"/></svg>
+        <div><h3>Signed and notarized</h3><p>Built for Apple silicon and Intel, macOS 13 or later, and notarized by Apple.</p></div>
+      </div>
+      <div>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="13" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+        <div><h3>Files stay on your Mac</h3><p>Captures save to your Pictures folder; videos you share go to your own Google Drive. No telemetry.</p></div>
+      </div>
+      <div>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 12a8 8 0 1 1-2.3-5.7"/><path d="M20 4v5h-5"/></svg>
+        <div><h3>Updates itself</h3><p>New versions arrive in the app; install this once and you are done.</p></div>
+      </div>
+    </div>
+  </section>
 </main>
-<footer>ShotMark for Kantiv · <a href="https://github.com/rjawali/shotmark-releases/releases">All releases</a></footer>
+
+<footer>
+  <div class="wrap">
+    <span>ShotMark for Kantiv</span>
+    <span><a href="https://github.com/rjawali/shotmark-releases/releases/latest">What’s new</a> · <a href="https://github.com/rjawali/shotmark-releases/releases">All releases</a></span>
+  </div>
+</footer>
+
 <script>
+  // Shows the notarized installer's version and SHA-256 so a first install can be checked against GitHub's own asset digest.
+  fetch('https://api.github.com/repos/rjawali/shotmark-releases/releases/latest', { headers: { Accept: 'application/vnd.github+json' } })
+    .then(r => r.ok ? r.json() : null)
+    .then(rel => {
+      const asset = rel && rel.assets && rel.assets.find(a => a.name === 'ShotMark.dmg');
+      const digest = asset && asset.digest && asset.digest.replace(/^sha256:/, '');
+      if (!digest) return;
+      document.getElementById('ver').textContent = rel.tag_name.replace(/^v/, '');
+      document.getElementById('sha').textContent = digest;
+      document.getElementById('verify').hidden = false;
+    }).catch(() => {});
   // Show the install steps once the download begins; the link itself does the download.
   const isMac = /Macintosh|Mac OS X/.test(navigator.userAgent) && !/iPhone|iPad/.test(navigator.userAgent);
   if (!isMac) document.body.classList.add('other-os');
